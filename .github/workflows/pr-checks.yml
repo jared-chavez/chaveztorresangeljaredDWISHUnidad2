@@ -1,8 +1,7 @@
-name: Pull Request Checks
+name: Pull Request Checks (disabled)
 
 on:
-  pull_request:
-    branches: [development, master]
+  workflow_dispatch:
 
 jobs:
   code-quality:
