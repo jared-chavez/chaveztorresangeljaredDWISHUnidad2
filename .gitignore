@@ -25,7 +25,6 @@ Thumbs.db
 
 # Env files
 .env
-.env.local
 .env.*.local
 
 # Vite cache
@@ -36,3 +35,5 @@ Thumbs.db
 
 # Misc
 coverage/
+api/dist/
+api-client/dist/
