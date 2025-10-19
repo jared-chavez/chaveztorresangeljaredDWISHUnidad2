@@ -16,17 +16,14 @@ async function run() {
 
   const client = await getClient();
   try {
-    await client.query('BEGIN');
     for (const file of files) {
       const fullPath = path.join(migrationsDir, file);
       const sql = fs.readFileSync(fullPath, 'utf8');
       console.log(`Running migration: ${file}`);
       await client.query(sql);
     }
-    await client.query('COMMIT');
     console.log('Migrations completed successfully.');
   } catch (err) {
-    await client.query('ROLLBACK');
     console.error('Migration failed:', err);
     process.exitCode = 1;
   } finally {
