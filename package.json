@@ -2,19 +2,45 @@
   "name": "crud-31-minutos",
   "version": "0.1.0",
   "private": true,
-  "workspaces": [
-    "api",
-    "api-client"
-  ],
+  "type": "module",
   "scripts": {
-    "dev": "concurrently -n api,client -c blue,green \"npm run dev -w api\" \"npm run dev -w api-client\"",
-    "build": "npm run build -w api && npm run build -w api-client",
+    "dev:api": "cd api && ts-node-dev --respawn --transpile-only src/index.ts",
+    "dev:client": "cd api-client && vite",
+    "dev": "concurrently -n api,client -c blue,green \"npm run dev:api\" \"npm run dev:client\"",
+    "build:api": "cd api && tsc -p tsconfig.json",
+    "build:client": "cd api-client && tsc -b && vite build",
+    "build": "npm run build:api && npm run build:client",
+    "start:api": "cd api && node dist/index.js",
+    "preview:client": "cd api-client && vite preview",
     "docker:up": "docker compose up -d",
     "docker:down": "docker compose down",
-    "db:migrate": "npm run migrate:dev -w api",
-    "setup": "npm install && npm run docker:up && sleep 3 && npm run db:migrate"
+    "db:migrate": "cd api && ts-node-dev --transpile-only scripts/runMigrations.ts",
+    "setup": "npm install && npm run docker:up && sleep 3 && npm run db:migrate",
+    "clean": "rm -rf node_modules",
+    "fresh": "npm run clean && npm run setup"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "pg": "^8.12.0",
+    "dotenv": "^16.4.5",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.14.12",
+    "@types/pg": "^8.11.10",
+    "@types/react": "^19.1.16",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.0.4",
+    "concurrently": "^8.2.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "~5.9.3",
+    "vite": "npm:rolldown-vite@7.1.14"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }
