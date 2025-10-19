@@ -7,7 +7,7 @@ on:
       - 'api/**'
       - '.github/workflows/api-ci.yml'
   pull_request:
-    branches: [development]
+    branches: [development, master]
     paths:
       - 'api/**'
       - '.github/workflows/api-ci.yml'
