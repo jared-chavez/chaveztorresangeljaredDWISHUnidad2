@@ -20,12 +20,16 @@
     "fresh": "npm run clean && npm run setup"
   },
   "dependencies": {
+    "@types/multer": "^2.0.0",
     "cors": "^2.8.5",
-    "express": "^4.19.2",
-    "pg": "^8.12.0",
     "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "multer": "^2.0.2",
+    "pg": "^8.12.0",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "react-hot-toast": "^2.6.0",
+    "react-router-dom": "^7.9.4"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",

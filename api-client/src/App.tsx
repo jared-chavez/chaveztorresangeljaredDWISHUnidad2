@@ -1,56 +1,65 @@
-import { useEffect, useState } from 'react'
+import { Routes, Route, Link, useLocation } from 'react-router-dom'
+import NewsList from './pages/NewsList'
+import NewsForm from './pages/NewsForm'
 
-type News = {
-  id: number
-  title: string
-  content: string
-  author: string
-  category: string
-  imageUrl?: string
-  createdAt: string
-  updatedAt: string
-}
+// Iconos SVG simples
+const HomeIcon = () => (
+  <svg className="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+    <polyline points="9,22 9,12 15,12 15,22"/>
+  </svg>
+)
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || ''
+const PlusIcon = () => (
+  <svg className="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <line x1="12" y1="5" x2="12" y2="19"/>
+    <line x1="5" y1="12" x2="19" y2="12"/>
+  </svg>
+)
+
 
 export default function App() {
-  const [news, setNews] = useState<News[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    const url = API_BASE_URL ? `${API_BASE_URL}/api/news` : '/api/news'
-    fetch(url)
-      .then(async (r) => {
-        if (!r.ok) throw new Error(`HTTP ${r.status}`)
-        return r.json()
-      })
-      .then(setNews)
-      .catch((e) => setError(e.message))
-      .finally(() => setLoading(false))
-  }, [])
-
-  if (loading) return <p style={{ padding: 16 }}>Cargando noticias...</p>
-  if (error) return <p style={{ padding: 16, color: 'red' }}>Error: {error}</p>
+  const location = useLocation()
 
   return (
-    <div style={{ maxWidth: 860, margin: '0 auto', padding: 16 }}>
-      <h1 style={{ marginBottom: 12 }}>Noticias - 31 Minutos</h1>
-      {news.length === 0 ? (
-        <p>No hay noticias</p>
-      ) : (
-        <ul style={{ listStyle: 'none', padding: 0, display: 'grid', gap: 12 }}>
-          {news.map((n) => (
-            <li key={n.id} style={{ border: '1px solid #ddd', borderRadius: 8, padding: 12 }}>
-              <h2 style={{ margin: 0 }}>{n.title}</h2>
-              <p style={{ margin: '8px 0 0 0', color: '#555' }}>{n.content}</p>
-              <div style={{ marginTop: 8, fontSize: 12, color: '#666' }}>
-                <span>Autor: {n.author}</span> · <span>Categoría: {n.category}</span>
-              </div>
+    <div className="dashboard-layout">
+      {/* Sidebar */}
+      <div className="dashboard-sidebar">
+        <div style={{ padding: '1.5rem 0 0 0' }}>
+          <Link to="/" className="dashboard-logo" style={{ display: 'block', padding: '0 1.5rem', marginBottom: '2rem' }}>
+            31 Minutos
+          </Link>
+        </div>
+
+        <nav>
+          <ul className="sidebar-nav">
+            <li>
+              <Link to="/" className={location.pathname === '/' ? 'active' : ''}>
+                <HomeIcon />
+                Dashboard
+              </Link>
             </li>
-          ))}
-        </ul>
-      )}
+            <li>
+              <Link to="/create" className={location.pathname === '/create' ? 'active' : ''}>
+                <PlusIcon />
+                Crear Noticia
+              </Link>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      {/* Main Content Area */}
+      <div className="dashboard-main">
+        {/* Content */}
+        <div className="dashboard-content">
+          <Routes>
+            <Route path="/" element={<NewsList />} />
+            <Route path="/create" element={<NewsForm />} />
+            <Route path="/edit/:id" element={<NewsForm />} />
+          </Routes>
+        </div>
+      </div>
     </div>
   )
 }
